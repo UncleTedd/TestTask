@@ -1,0 +1,85 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/osimjongulakov/RiderProjects/AlifTestTask/AlifTestTask/AlifTestTask.csproj": {}
+  },
+  "projects": {
+    "/Users/osimjongulakov/RiderProjects/AlifTestTask/AlifTestTask/AlifTestTask.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/osimjongulakov/RiderProjects/AlifTestTask/AlifTestTask/AlifTestTask.csproj",
+        "projectName": "AlifTestTask",
+        "projectPath": "/Users/osimjongulakov/RiderProjects/AlifTestTask/AlifTestTask/AlifTestTask.csproj",
+        "packagesPath": "/Users/osimjongulakov/.nuget/packages/",
+        "outputPath": "/Users/osimjongulakov/RiderProjects/AlifTestTask/AlifTestTask/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/osimjongulakov/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/Users/osimjongulakov/localPackages/": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.31, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.31, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.413/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
