@@ -8,16 +8,17 @@ namespace AlifTestTask.Controllers;
 [Route("[controller]")]
 public class UserController: Controller
 {
-    private UserService _service;
+    private readonly UserService _service;
 
     public UserController(UserService service)
     {
-        service = _service;
+        _service = service;
     }
 
-    [HttpPost]
-    public async Task<ResponseModel> CreateUser(UserDTO user)
+    [HttpPost("createUser")]
+    public async Task<ResponseModel> CreateUser([FromBody]UserDTO user)
     {
+        
         var serviceResponse = await _service.CreateUser(user);
         return serviceResponse;
     }

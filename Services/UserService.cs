@@ -20,10 +20,19 @@ public class UserService
     {
         var user = new User()
         {
+            IsVerified = userDto.IsVerified,
+            Id = userDto.Id,
             Name = userDto.Name,
             Surname = userDto.Surname,
         };
-        var response = await _repositoryService.CreateUser(user);
-        return response;
+        var wallet = new Wallet()
+        {
+            Balance = 0,
+            Id = 1,
+        };
+        
+        var createUserResponse = await _repositoryService.CreateUser(user, wallet);
+        
+        return createUserResponse;
     }
 }

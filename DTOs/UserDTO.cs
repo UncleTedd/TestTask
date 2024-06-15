@@ -8,6 +8,6 @@ public class UserDTO
     public int Id { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
-    public Wallet Wallet { get; set; }
-    public List<Transaction> Type { get; set; }
+    
+    
 }

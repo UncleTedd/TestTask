@@ -3,6 +3,7 @@ using System;
 using AlifTestTask.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlifTestTask.Migrations
 {
     [DbContext(typeof(AlifDbContext))]
-    partial class AlifDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240615185318_updated migration")]
+    partial class updatedmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,7 +71,7 @@ namespace AlifTestTask.Migrations
 
             modelBuilder.Entity("AlifTestTask.Models.Wallet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 

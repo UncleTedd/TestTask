@@ -1,5 +1,6 @@
 using AlifTestTask.DbContext;
 using AlifTestTask.Models;
+using Transaction = System.Transactions.Transaction;
 
 namespace AlifTestTask.RepositoryService;
 
@@ -12,11 +13,16 @@ public class UserRepositoryService
         _dbContext = dbContext;
     }
 
-    public async Task<ResponseModel> CreateUser(User user)
+    public async Task<ResponseModel> CreateUser(User user, Wallet wallet)
     {
-        var result = await _dbContext.Users.AddAsync(new User() { Name = user.Name, Surname = user.Surname });
-        var dbResponse = await _dbContext.SaveChangesAsync();
-        if (dbResponse == 1)
+        // var transactionCreation = await _dbContext.Transactions.AddAsync(new Models.Transaction()
+        //     { Id = transaction.Id, User = transaction.User });
+      
+         // var walletCreation =_dbContext.Wallets.Add(new Wallet() { Balance = wallet.Balance});
+         // var dbResponse = await _dbContext.SaveChangesAsync();
+         var result = _dbContext.Users.Add(new User() { Name = user.Name, Surname = user.Surname, Wallet = new Wallet(){Balance = wallet.Balance}});
+         var dbResponse = await _dbContext.SaveChangesAsync();
+        if (dbResponse > 0)
         {
             return new ResponseModel()
             {
@@ -24,6 +30,7 @@ public class UserRepositoryService
                 Comment = "successfully added"
             };
         }
+         
 
         return new ResponseModel()
         {
