@@ -19,7 +19,7 @@ namespace AlifTestTask.Migrations
                 oldNullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserId",
+                name: "IX_Transactions_UserIds",
                 table: "Transactions",
                 column: "UserId");
         }

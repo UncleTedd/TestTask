@@ -9,5 +9,6 @@ public class User
    public string Name { get; set; }
    public string Surname { get; set; }
    public Wallet Wallet { get; set; }
+   
 
 }

@@ -1,3 +1,4 @@
+using System.Transactions;
 using AlifTestTask.DbContext;
 using AlifTestTask.Helper;
 using AlifTestTask.RepositoryService;
@@ -17,6 +18,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserRepositoryService>();
 builder.Services.AddScoped<VerificationService>();
 builder.Services.AddScoped<Functions>();
+builder.Services.AddScoped<TransactionService>();
 
 builder.Services.AddDbContext<AlifDbContext>(options =>
 {

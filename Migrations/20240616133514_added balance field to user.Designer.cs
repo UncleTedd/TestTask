@@ -3,6 +3,7 @@ using System;
 using AlifTestTask.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlifTestTask.Migrations
 {
     [DbContext(typeof(AlifDbContext))]
-    partial class AlifDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616133514_added balance field to user")]
+    partial class addedbalancefieldtouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,6 +53,9 @@ namespace AlifTestTask.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Name")
                         .IsRequired()

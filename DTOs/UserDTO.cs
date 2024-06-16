@@ -9,7 +9,7 @@ public class UserDTO
     public string Name { get; set; }
     public string Surname { get; set; }
     public int? PhoneNumber { get; set; }
-    public int PassportNumber { get; set; }
-    
+    public int? PassportNumber { get; set; }
+    public Wallet Wallet { get; set; }
     
 }

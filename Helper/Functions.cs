@@ -35,4 +35,33 @@ public class Functions
         };
         return user;
     }
+    
+    public User MapCreateUserToUser(CreateUserModel createUserModel)
+    {
+        var user = new User()
+        {
+            Name = createUserModel.Name,
+            Surname = createUserModel.Surname,
+            PhoneNumber = createUserModel.PhoneNumber,
+            PassportNumber = createUserModel.PassportNumber
+        };
+        return user;
+    }
+    
+    public UserDTO MapUserToUserDto(User user, Wallet wallet)
+    {
+        var userDto = new UserDTO()
+        {
+            UserVerification = user.UserVerification,
+            Id = user.Id,
+            Name = user.Name,
+            Surname = user.Surname,
+            PhoneNumber = user.PhoneNumber,
+            PassportNumber = user.PassportNumber,
+            Wallet = wallet
+            
+        };
+        return userDto;
+    }
+    
 }

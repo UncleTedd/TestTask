@@ -16,7 +16,7 @@ public class UserController: Controller
     }
 
     [HttpPost("createUser")]
-    public async Task<ResponseModel> CreateUser([FromBody]UserDTO user)
+    public async Task<ResponseModel> CreateUser([FromBody]CreateUserModel user)
     {
         
         var serviceResponse = await _service.CreateUser(user);
@@ -34,5 +34,20 @@ public class UserController: Controller
     {
         var serviceresponse = await _service.VerifyUser( user);
         return serviceresponse;
+    }
+
+    [HttpPost("GetUser")]
+    public async Task<UserDTO?> GetUser(int id)
+    {
+        var serviceResponse = await _service.GetUser(id);
+        return serviceResponse;
+    }
+
+    [HttpPost("Replenish")]
+    public async Task<ResponseModel> Replenish(int id, decimal amount)
+    {
+        var serviceResponse = await _service.Replenish(id,amount);
+        return serviceResponse;
+
     }
 }

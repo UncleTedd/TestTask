@@ -19,17 +19,22 @@ public class UserService
         _functions = functions;
     }
 
-    public async Task<ResponseModel> CreateUser(UserDTO userDto)
+    public async Task<ResponseModel> CreateUser(CreateUserModel userModel)
     {
-        var user = _functions.MapUserDtoToUser(userDto);
-        var wallet = new Wallet()
-        {
-            Balance = 0,
-            Id = 1,
-        };
+        var user = _functions.MapCreateUserToUser(userModel);
         
         var createUserResponse = await _repositoryService.CreateUser(user);
         return createUserResponse;
+    }
+
+    public async Task<UserDTO?> GetUser(int id)
+    {
+        var serviceResponse = await _repositoryService.GetUser(id);
+        if (serviceResponse is null)
+        {
+            return null;
+        }
+        return serviceResponse;
     }
 
     public async Task<ResponseModel> CheckUserVerification(int id)
@@ -57,6 +62,13 @@ public class UserService
         var resultOfVerifyingUser = await _repositoryService.VerifyUser(user);
         return resultOfVerifyingUser;
     }
+
+    public async Task<ResponseModel> Replenish(int id, decimal amount)
+    {
+        var resultOfReplenish = await _repositoryService.Replenish(id, amount);
+        return resultOfReplenish;
+    }
+    
     
     
 }

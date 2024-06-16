@@ -1,8 +1,10 @@
 using AlifTestTask.DbContext;
+using AlifTestTask.DTOs;
 using AlifTestTask.Helper;
 using AlifTestTask.Models;
 using AlifTestTask.Services;
 using Microsoft.EntityFrameworkCore;
+
 
 
 namespace AlifTestTask.RepositoryService;
@@ -55,6 +57,19 @@ public class UserRepositoryService
         };
     }
 
+    public async Task<UserDTO?> GetUser(int id)
+    {
+        var dbResponse = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        if (dbResponse is null) return null;
+        var dbWalletResponse = await _dbContext.Wallets.FirstOrDefaultAsync(x=>x.Id == dbResponse.Id);
+
+        
+        if (dbWalletResponse is null) return null;
+        
+        var user = _functions.MapUserToUserDto(dbResponse, dbWalletResponse);
+        return user;
+    }
+
     public async Task<ResponseModel> VerifyUser(ToVerifyUserModel user)
     {
         User updatedUser;
@@ -90,15 +105,55 @@ public class UserRepositoryService
 
     }
     
-    
-    
     public async Task<int> UserVerified(int id)
     {
         var userToVerify = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         if (userToVerify != null) return userToVerify.UserVerification;
         return -1;
     }
-    
+
+    public async Task<ResponseModel> Replenish(int id, decimal amount)
+    {
+        var transaction = new Transaction()
+        {
+            Amount = amount,
+            transactionTime = DateTime.Now,
+        };
+        var user = await _dbContext.Users.Include(user => user.Wallet).FirstOrDefaultAsync(x => x.Id == id);
+        
+        if (user is null)
+            return new ResponseModel()
+            {
+                Result = -1,
+                Comment = "Invalid data in replenish service!"
+            };
+        if (user.UserVerification != 1)
+            return new ResponseModel()
+            {
+                Result = -1,
+                Comment = "Invalid data in replenish service!"
+            };
+        user.Wallet.Balance += amount;
+        user.Wallet.Transactions.Add(transaction);
+        
+        var response = await _dbContext.SaveChangesAsync();
+
+        if (response>0)
+        {
+            return new ResponseModel()
+            {
+                Result = response,
+                Comment = "replenish was successful"
+            };
+        }
+        return new ResponseModel()
+        {
+            Result = 0,
+            Comment = "could not replenish balance!"
+        };
+
+
+    }
     
     
     
