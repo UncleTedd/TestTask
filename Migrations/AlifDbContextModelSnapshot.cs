@@ -53,9 +53,18 @@ namespace AlifTestTask.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PassportNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PhoneNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("UserVerification")
+                        .HasColumnType("int");
 
                     b.Property<int>("WalletId")
                         .HasColumnType("int");

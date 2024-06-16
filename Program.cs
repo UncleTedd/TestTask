@@ -1,4 +1,5 @@
 using AlifTestTask.DbContext;
+using AlifTestTask.Helper;
 using AlifTestTask.RepositoryService;
 using AlifTestTask.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserRepositoryService>();
 builder.Services.AddScoped<VerificationService>();
+builder.Services.AddScoped<Functions>();
 
 builder.Services.AddDbContext<AlifDbContext>(options =>
 {

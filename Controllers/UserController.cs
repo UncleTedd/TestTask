@@ -22,5 +22,17 @@ public class UserController: Controller
         var serviceResponse = await _service.CreateUser(user);
         return serviceResponse;
     }
-    
+
+    [HttpPost("{id}")]
+    public async Task<ResponseModel> CheckUserVerification([FromRoute] int id)
+    {
+        var serviceResponse = await _service.CheckUserVerification(id);
+        return serviceResponse;
+    }
+    [HttpPost("verifyUser")]
+    public async Task<ResponseModel> VerifyUser( [FromBody] ToVerifyUserModel user)
+    {
+        var serviceresponse = await _service.VerifyUser( user);
+        return serviceresponse;
+    }
 }
