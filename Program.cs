@@ -1,10 +1,8 @@
-using System.Transactions;
 using AlifTestTask.DbContext;
 using AlifTestTask.Helper;
 using AlifTestTask.RepositoryService;
 using AlifTestTask.Services;
 using Microsoft.EntityFrameworkCore;
-
 
 var builder = WebApplication.CreateBuilder(args);
 

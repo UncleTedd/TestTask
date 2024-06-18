@@ -1,4 +1,3 @@
-using AlifTestTask.DbContext;
 using AlifTestTask.DTOs;
 using AlifTestTask.Helper;
 using AlifTestTask.Models;
@@ -8,13 +7,12 @@ namespace AlifTestTask.Services;
 
 public class UserService
 {
-    
-    private readonly UserRepositoryService _repositoryService;
     private readonly Functions _functions;
+
+    private readonly UserRepositoryService _repositoryService;
 
     public UserService(UserRepositoryService userRepositoryService, Functions functions)
     {
-      
         _repositoryService = userRepositoryService;
         _functions = functions;
     }
@@ -22,7 +20,7 @@ public class UserService
     public async Task<ResponseModel> CreateUser(CreateUserModel userModel)
     {
         var user = _functions.MapCreateUserToUser(userModel);
-        
+
         var createUserResponse = await _repositoryService.CreateUser(user);
         return createUserResponse;
     }
@@ -30,10 +28,7 @@ public class UserService
     public async Task<UserDTO?> GetUser(int id)
     {
         var serviceResponse = await _repositoryService.GetUser(id);
-        if (serviceResponse is null)
-        {
-            return null;
-        }
+        if (serviceResponse is null) return null;
         return serviceResponse;
     }
 
@@ -57,9 +52,7 @@ public class UserService
 
     public async Task<ResponseModel> GetBalance(int id)
     {
-        return await Task.FromResult(new ResponseModel());
+        var resultOfGetBalance = await _repositoryService.GetBalance(id);
+        return resultOfGetBalance;
     }
-    
-    
-    
 }

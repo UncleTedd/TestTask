@@ -1,15 +1,14 @@
 using AlifTestTask.Models;
-
-namespace AlifTestTask.DbContext;
 using Microsoft.EntityFrameworkCore;
 
-public class AlifDbContext : DbContext
+namespace AlifTestTask.DbContext;
+
+public class AlifDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public AlifDbContext(DbContextOptions<AlifDbContext> options) : base(options)
     {
-        
     }
-    
+
     public DbSet<User> Users { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Wallet> Wallets { get; set; }
@@ -21,10 +20,10 @@ public class AlifDbContext : DbContext
             .WithOne(e => e.User)
             .HasForeignKey<Wallet>(e => e.UserId)
             .IsRequired();
-        
+
         modelBuilder.Entity<Wallet>().ToTable("wallets")
             .HasMany(e => e.Transactions)
-            .WithOne(e=>e.Wallet)
+            .WithOne(e => e.Wallet)
             .HasForeignKey(e => e.WalletId)
             .IsRequired();
 
