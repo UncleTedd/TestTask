@@ -34,13 +34,25 @@ public class UserRepositoryService
              Id = user.Id,
              Name = user.Name,
              Surname = user.Surname,
-             Wallet = new Wallet()
+             Wallet = new Wallet(),
+             PhoneNumber = user.PhoneNumber,
+             PassportNumber = user.PassportNumber
          };
-         // var toSend = _dbContext.Users.Add(userInstance);
-         var result = _dbContext.Users.Add(new User()
+
+         if (!string.IsNullOrWhiteSpace(userInstance.PhoneNumber)  && !string.IsNullOrWhiteSpace(userInstance.PassportNumber))
          {
-             Name = user.Name, Surname = user.Surname, Wallet = new Wallet(){Balance = 0}
-         });
+             if ( _functions.VerifyPhonePassportNumber(userInstance.PhoneNumber, userInstance.PassportNumber) == 1)
+             {
+                 userInstance.UserVerification = 1;
+             }
+         }
+
+         // var toSend = _dbContext.Users.Add(userInstance);
+         // var result = _dbContext.Users.Add(new User()
+         // {
+         //     Name = user.Name, Surname = user.Surname, Wallet = new Wallet(){Balance = 0}
+         // });
+         var result = await _dbContext.Users.AddAsync(userInstance);
          var dbResponse = await _dbContext.SaveChangesAsync();
         if (dbResponse > 0)
         {
@@ -59,22 +71,37 @@ public class UserRepositoryService
 
     public async Task<UserDTO?> GetUser(int id)
     {
-        var dbResponse = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-        if (dbResponse is null) return null;
-        var dbWalletResponse = await _dbContext.Wallets.FirstOrDefaultAsync(x=>x.Id == dbResponse.Id);
+       var dbResponse = await _dbContext.Users.Include(x=>x.Wallet).Where(y=>y.Wallet.UserId == id).FirstOrDefaultAsync();
+        // var response = await _dbContext.Users.Include(x=>x.Wallet).Select(x=>new User()
+        // {
+        //     Name = x.Name,
+        //     Surname = x.Surname,
+        //     PhoneNumber = x.PhoneNumber,
+        //     PassportNumber = x.PassportNumber,
+        //     UserVerification = x.UserVerification,
+        //     Wallet = x.Wallet
+        //     
+        // }).ToList();
+        //if (dbResponse is null) return null;
+        // var dbWalletResponse = await _dbContext.Wallets.FirstOrDefaultAsync(x=>x.Id == dbResponse.Id);
+       // if (dbWalletResponse is null) return null;
+        // var user = _functions.MapUserToUserDto(dbResponse);
+
+
+       // var response = await _dbContext.Users.Include(x => x.Wallet).ToListAsync();
 
         
-        if (dbWalletResponse is null) return null;
-        
-        var user = _functions.MapUserToUserDto(dbResponse, dbWalletResponse);
-        return user;
+        var user = _functions.MapToUserDto(dbResponse);
+       
+        // var user = dbResponse.Select(x => _functions.MapToUserDto(x)).ToList();
+       return user;
     }
 
     public async Task<ResponseModel> VerifyUser(ToVerifyUserModel user)
     {
-        User updatedUser;
+       
         var toVerifyUser = await _dbContext.Users.FindAsync(user.Id);
-        var res = _functions.VerifyUser(user);
+        var res = _functions.VerifyPhonePassportNumber(user.PhoneNumber, user.PassportSeries);
         if (res == 0 || toVerifyUser is null)
         {
             return new ResponseModel()
@@ -92,8 +119,8 @@ public class UserRepositoryService
                 //     PhoneNumber = user.PhoneNumber,
                 //     UserVerification = 1
                 // };
-        toVerifyUser.PassportNumber =int.Parse(user.PassportSeries); 
-        toVerifyUser.PhoneNumber =int.Parse(user.PhoneNumber); 
+        toVerifyUser.PassportNumber =user.PassportSeries; 
+        toVerifyUser.PhoneNumber =user.PhoneNumber; 
         toVerifyUser.UserVerification = 1;
         var responseFromSavingChanges = await _dbContext.SaveChangesAsync();
         return new ResponseModel()
@@ -105,11 +132,40 @@ public class UserRepositoryService
 
     }
     
-    public async Task<int> UserVerified(int id)
+    public async Task<ResponseModel> UserVerified(int id)
     {
         var userToVerify = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-        if (userToVerify != null) return userToVerify.UserVerification;
-        return -1;
+        if (userToVerify == null)
+            return new ResponseModel()
+            {
+                Result = -1,
+                Comment = "invalid data"
+            };
+        // not sure this check is needed
+        if (userToVerify is { PassportNumber: not null, PhoneNumber: not null } && _functions.VerifyPhonePassportNumber(userToVerify.PhoneNumber, userToVerify.PassportNumber) == 1)
+        {
+            userToVerify.UserVerification = 1;
+            await _dbContext.SaveChangesAsync();
+        }
+        var result = userToVerify.UserVerification;
+
+        switch (result)
+        {
+            case 0:
+                return new ResponseModel()
+                {
+                    Result = result,
+                    Comment = "user is not verified!"
+                };
+            case 1:
+                return new ResponseModel()
+                {
+                    Result = result,
+                    Comment = "user is verified!"
+                };
+        }
+
+        return null;
     }
 
     public async Task<ResponseModel> Replenish(int id, decimal amount)
@@ -151,8 +207,13 @@ public class UserRepositoryService
             Result = 0,
             Comment = "could not replenish balance!"
         };
+    }
 
+    public async Task<ResponseModel> GetBalance(int id)
+    {
+        //var dbResponse = await _dbContext.Users.FirstOrDefaultAsync(x=>x.)
 
+        return await Task.FromResult(new ResponseModel());
     }
     
     

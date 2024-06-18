@@ -28,10 +28,7 @@ namespace AlifTestTask.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WalletId")
+                    b.Property<int>("WalletId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("transactionTime")
@@ -39,11 +36,9 @@ namespace AlifTestTask.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("transactions", (string)null);
                 });
 
             modelBuilder.Entity("AlifTestTask.Models.User", b =>
@@ -56,11 +51,11 @@ namespace AlifTestTask.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("PassportNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PassportNumber")
+                        .HasColumnType("longtext");
 
-                    b.Property<int?>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -71,7 +66,7 @@ namespace AlifTestTask.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("AlifTestTask.Models.Wallet", b =>
@@ -91,31 +86,29 @@ namespace AlifTestTask.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Wallets");
+                    b.ToTable("wallets", (string)null);
                 });
 
             modelBuilder.Entity("AlifTestTask.Models.Transaction", b =>
                 {
-                    b.HasOne("AlifTestTask.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("AlifTestTask.Models.Wallet", "Wallet")
+                        .WithMany("Transactions")
+                        .HasForeignKey("WalletId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AlifTestTask.Models.Wallet", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("WalletId");
-
-                    b.Navigation("User");
+                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("AlifTestTask.Models.Wallet", b =>
                 {
-                    b.HasOne("AlifTestTask.Models.User", null)
+                    b.HasOne("AlifTestTask.Models.User", "User")
                         .WithOne("Wallet")
                         .HasForeignKey("AlifTestTask.Models.Wallet", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AlifTestTask.Models.User", b =>

@@ -40,24 +40,10 @@ public class UserService
     public async Task<ResponseModel> CheckUserVerification(int id)
     {
         var resultOfVerification = await _repositoryService.UserVerified(id);
-
-        if (resultOfVerification == 0)
-        {
-            return new ResponseModel()
-            {
-                Result = resultOfVerification,
-                Comment = "user is not verified"
-            };
-        }
-
-        return new ResponseModel()
-        {
-            Result = -1,
-            Comment = "Error occured while verifying, incorrect data"
-        };
+        return resultOfVerification;
     }
 
-    public async Task<ResponseModel> VerifyUser( ToVerifyUserModel user)
+    public async Task<ResponseModel> VerifyUser(ToVerifyUserModel user)
     {
         var resultOfVerifyingUser = await _repositoryService.VerifyUser(user);
         return resultOfVerifyingUser;
@@ -67,6 +53,11 @@ public class UserService
     {
         var resultOfReplenish = await _repositoryService.Replenish(id, amount);
         return resultOfReplenish;
+    }
+
+    public async Task<ResponseModel> GetBalance(int id)
+    {
+        return await Task.FromResult(new ResponseModel());
     }
     
     

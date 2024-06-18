@@ -23,8 +23,8 @@ public class UserController: Controller
         return serviceResponse;
     }
 
-    [HttpPost("{id}")]
-    public async Task<ResponseModel> CheckUserVerification([FromRoute] int id)
+    [HttpPost("checkVerification")]
+    public async Task<ResponseModel> CheckUserVerification(int id)
     {
         var serviceResponse = await _service.CheckUserVerification(id);
         return serviceResponse;

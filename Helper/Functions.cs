@@ -11,9 +11,9 @@ public class Functions
     private static readonly Regex _allowedPhoneRegex = new Regex(phonePattern, RegexOptions.Compiled);
     private static readonly Regex _allowedPassportRegex = new Regex(passportPattern, RegexOptions.Compiled);
 
-    public int VerifyUser(ToVerifyUserModel user)
+    public int VerifyPhonePassportNumber(string phoneNumber, string passportNumber)
     {
-        if (_allowedPhoneRegex.IsMatch(user.PhoneNumber)&& _allowedPassportRegex.IsMatch(user.PassportSeries) )
+        if (_allowedPhoneRegex.IsMatch(phoneNumber)&& _allowedPassportRegex.IsMatch(passportNumber) )
         {
             return 1;
         }
@@ -62,6 +62,28 @@ public class Functions
             
         };
         return userDto;
+    }
+
+    public UserDTO MapToUserDto(User? user)
+    {
+        return new UserDTO()
+        {
+            Name = user.Name,
+            Surname = user.Surname,
+            PhoneNumber = user.PhoneNumber,
+            PassportNumber = user.PhoneNumber,
+            UserVerification = user.UserVerification,
+            Wallet = new Wallet()
+            {
+                Transactions = user.Wallet.Transactions.Select(x=>new Transaction()
+                {
+                  transactionTime  = x.transactionTime,
+                  Amount = x.Amount,
+                  WalletId = x.WalletId,
+                  Wallet = x.Wallet
+                }).ToList()
+            }
+        };
     }
     
 }
