@@ -1,8 +1,8 @@
+using System.Globalization;
 using AlifTestTask.DbContext;
 using AlifTestTask.DTOs;
 using AlifTestTask.Helper;
 using AlifTestTask.Models;
-using AlifTestTask.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlifTestTask.RepositoryService;
@@ -11,6 +11,7 @@ public class UserRepositoryService
 {
     private readonly AlifDbContext _dbContext;
     private readonly Functions _functions;
+
     public UserRepositoryService(AlifDbContext dbContext, Functions functions)
     {
         _dbContext = dbContext;
@@ -52,7 +53,7 @@ public class UserRepositoryService
     {
         var dbResponse = await _dbContext.Users.Include(x => x.Wallet).Where(y => y.Wallet.UserId == id)
             .FirstOrDefaultAsync();
-        
+
         var user = _functions.MapToUserDto(dbResponse);
         return user;
     }
@@ -111,8 +112,11 @@ public class UserRepositoryService
                     Comment = "user is verified!"
                 };
         }
-
-        return null;
+        return new ResponseModel
+        {
+            Result = -1,
+            Comment = "invalid data"
+        };
     }
 
     public async Task<ResponseModel> Replenish(int id, decimal amount)
@@ -166,22 +170,37 @@ public class UserRepositoryService
         };
     }
 
+    public async Task<GetTransactionsModel> GetBalanceAndTransactions(int id)
+    {
+        var dbResponse = await _dbContext.Users.Include(user => user.Wallet)
+            .FirstOrDefaultAsync(x => x.Wallet.UserId == id);
+
+        var response = await _dbContext.Users.Include(x => x.Wallet)
+            .Where(x => x.Wallet.UserId == id).Include(y => y.Wallet.Transactions).ToListAsync();
+        
+        if (dbResponse != null)
+        {
+            var balance = dbResponse.Wallet.Balance;
+        }
+
+        var result = _functions.GetBalanceAndTransaction(response[0].Wallet);
+        return result;
+    }
+
     public async Task<ResponseModel> GetBalance(int id)
     {
         var dbResponse = await _dbContext.Users.Include(user => user.Wallet)
             .FirstOrDefaultAsync(x => x.Wallet.UserId == id);
-        if (dbResponse is null)
+        if (dbResponse != null)
             return new ResponseModel
             {
-                Result = -1,
-                Comment = "invalid data!"
+                Result = 1,
+                Comment = $"Balance:{dbResponse.Wallet.Balance.ToString(CultureInfo.InvariantCulture)}"
             };
-        var balance = dbResponse.Wallet.Balance;
-
         return new ResponseModel
         {
-            Result = 1,
-            Comment = $"Balance:{balance}"
+            Result = -1,
+            Comment = "user does not exist! incorrect data"
         };
     }
 }

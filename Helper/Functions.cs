@@ -44,18 +44,23 @@ public class Functions
         return user;
     }
 
-    public UserDTO MapUserToUserDto(User user, Wallet wallet)
+    public GetTransactionsModel GetBalanceAndTransaction(Wallet wallet)
     {
-        var userDto = new UserDTO
+        decimal money = 0;
+        var now = DateTime.Now;
+        var lastMonth = now.AddDays(-30);
+
+        var userDto = new GetTransactionsModel
         {
-            UserVerification = user.UserVerification,
-            Id = user.Id,
-            Name = user.Name,
-            Surname = user.Surname,
-            PhoneNumber = user.PhoneNumber,
-            PassportNumber = user.PassportNumber,
-            Wallet = wallet
+            Transactions = wallet.Transactions.Select(x => new Transaction
+            {
+                Amount = x.Amount,
+                transactionTime = x.transactionTime
+            }).Where(y => y.transactionTime > lastMonth).ToList()
         };
+        for (var i = 0; i <= userDto.Transactions.Count - 1; i++) money += userDto.Transactions[i].Amount;
+
+        userDto.totalAmountOfMoneyTransfered = money;
         return userDto;
     }
 

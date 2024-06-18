@@ -50,6 +50,12 @@ public class UserService
         return resultOfReplenish;
     }
 
+    public async Task<GetTransactionsModel> GetBalanceAndTransactions(int id)
+    {
+        var resultGetBalanceAndTransactions = await _repositoryService.GetBalanceAndTransactions(id);
+        return resultGetBalanceAndTransactions;
+    }
+
     public async Task<ResponseModel> GetBalance(int id)
     {
         var resultOfGetBalance = await _repositoryService.GetBalance(id);

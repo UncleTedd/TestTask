@@ -51,6 +51,13 @@ public class UserController : Controller
         return serviceResponse;
     }
 
+    [HttpPost("GetBalanceAndTransactions")]
+    public async Task<GetTransactionsModel> GetBalanceAndTransactions(int id)
+    {
+        var serviceResponse = await _service.GetBalanceAndTransactions(id);
+        return serviceResponse;
+    }
+
     [HttpPost("GetBalance")]
     public async Task<ResponseModel> GetBalance(int id)
     {
